@@ -175,6 +175,23 @@ public class RegionCommands {
         int affected = editSession.replaceBlocks(region, from, Patterns.wrap(to));
         player.print(affected + " block(s) have been replaced.");
     }
+    
+    @Command(
+            aliases = { "/foreach" },
+            usage = "[<mask>] \"<command>\"",
+            desc = "Perform a command for each block in the selection (that suffices the mask if specified) - If you command does not have spaces, the quotes can be omitted. Use @p for the issuing player, @x, @y, @z for coordinates.",
+            min = 1,
+            max = 2
+        )
+    @CommandPermissions("worldedit.region.foreach")
+    @Logging(REGION)
+    public void foreach(Player player, EditSession editSession, @Selection Region region, @Optional Mask from, String command) throws WorldEditException {
+        if (from == null) {
+            from = new ExistingBlockMask(editSession);
+        }
+        int affected = editSession.foreachBlocks(region, from, player.getName(), command);
+        player.print(affected + " block(s) have been replaced.");
+    }
 
     @Command(
         aliases = { "/overlay" },
